@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using ReadingCommunityApi.Core.Dto;
-using ReadingCommunityApi.Core.Dtos;
-using ReadingCommunityApi.Core.Interfaces;
-using ReadingCommunityApi.Core.Models;
+using ReadingCommunityApi.Application.Dto;
+using ReadingCommunityApi.Application.Dtos;
+using ReadingCommunityApi.Application.Interfaces;
+
 
 [ApiController]
 [Route("api/[controller]")]

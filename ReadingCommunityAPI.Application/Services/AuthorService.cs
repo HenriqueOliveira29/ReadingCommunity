@@ -1,11 +1,12 @@
-using ReadingCommunityApi.Core.Dtos;
-using ReadingCommunityApi.Core.Interfaces;
-using ReadingCommunityApi.Core.Models;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using ReadingCommunityApi.Core.Dto;
+using ReadingCommunityApi.Application.Dto;
+using ReadingCommunityApi.Application.Dtos;
+using ReadingCommunityApi.Application.Interfaces;
+using ReadingCommunityApi.Core.Interfaces;
+using ReadingCommunityApi.Core.Models;
 
-namespace ReadingCommunityApi.Core.Services;
+namespace ReadingCommunityApi.Application.Services;
 
 public class AuthorService : IAuthorService
 {

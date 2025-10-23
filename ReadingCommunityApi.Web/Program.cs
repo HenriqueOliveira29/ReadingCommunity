@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using ReadingCommunityApi.Infrastructure.Data;
 using ReadingCommunityApi.Core.Interfaces;
 using ReadingCommunityApi.Infrastructure.Repositories;
-using ReadingCommunityApi.Core.Services;
-using ReadingCommunityApi.Core.Mapping;
-using System.Reflection;
+using ReadingCommunityApi.Application.Interfaces;
+using ReadingCommunityApi.Application.Services;
+using ReadingCommunityApi.Application.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 

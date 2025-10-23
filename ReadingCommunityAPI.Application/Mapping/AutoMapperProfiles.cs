@@ -1,9 +1,9 @@
 using AutoMapper;
-using ReadingCommunityApi.Core.Dto;
-using ReadingCommunityApi.Core.Dtos;
+using ReadingCommunityApi.Application.Dto;
+using ReadingCommunityApi.Application.Dtos;
 using ReadingCommunityApi.Core.Models;
 
-namespace ReadingCommunityApi.Core.Mapping;
+namespace ReadingCommunityApi.Application.Mapping;
 
 public class AutoMapperProfiles : Profile
 {

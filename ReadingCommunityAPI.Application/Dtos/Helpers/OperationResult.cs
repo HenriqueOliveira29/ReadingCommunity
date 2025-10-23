@@ -1,4 +1,4 @@
-namespace ReadingCommunityApi.Core.Dtos;
+namespace ReadingCommunityApi.Application.Dtos;
 public class OperationResult<T>
 {
     public T? Data { get; set; }

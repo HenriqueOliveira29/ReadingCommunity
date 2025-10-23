@@ -1,7 +1,7 @@
-using ReadingCommunityApi.Core.Dtos;
+using ReadingCommunityApi.Application.Dtos;
 using ReadingCommunityApi.Core.Models;
 
-namespace ReadingCommunityApi.Core.Interfaces;
+namespace ReadingCommunityApi.Application.Interfaces;
 
 public interface IBookService
 {

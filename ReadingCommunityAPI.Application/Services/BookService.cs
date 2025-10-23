@@ -1,10 +1,11 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using ReadingCommunityApi.Core.Dtos;
+using ReadingCommunityApi.Application.Dtos;
+using ReadingCommunityApi.Application.Interfaces;
 using ReadingCommunityApi.Core.Interfaces;
 using ReadingCommunityApi.Core.Models;
 
-namespace ReadingCommunityApi.Core.Services;
+namespace ReadingCommunityApi.Application.Services;
 
 public class BookService : IBookService
 {

@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ReadingCommunityApi.Core\ReadingCommunityApi.Core.csproj" />
+    <ProjectReference Include="..\ReadingCommunityAPI.Application\ReadingCommunityAPI.Application.csproj" />
     <ProjectReference Include="..\ReadingCommunityApi.Infrastructure\ReadingCommunityApi.Infrastructure.csproj" />
   </ItemGroup>
 

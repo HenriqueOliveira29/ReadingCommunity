@@ -1,4 +1,4 @@
-namespace ReadingCommunityApi.Core.Dtos;
+namespace ReadingCommunityApi.Application.Dtos;
 
 public class BookCreateDto
 {

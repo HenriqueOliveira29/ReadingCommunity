@@ -1,6 +1,6 @@
-using ReadingCommunityApi.Core.Dtos;
+using ReadingCommunityApi.Application.Dtos;
 
-namespace ReadingCommunityApi.Core.Dto;
+namespace ReadingCommunityApi.Application.Dto;
 
 public class AuthorDetailDTO
 {
