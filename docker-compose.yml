@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:18
     container_name: reading_community_db
     restart: always
     environment:
@@ -10,7 +10,21 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin123"
+    ports:
+      - "16543:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin/
 
 volumes:
   pgdata:
+  pgadmin-data:
+  
