@@ -89,19 +89,6 @@ public class AuthorService : IAuthorService
         }
     }
 
-    public async Task<Author?> GetByIdAsync(int id)
-    {
-        try
-        {
-            return await _authorRepository.GetByIdAsync(id);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return null;
-        }
-    }
-
     public async Task<Author?> Existe(int id)
     {
         try
@@ -112,6 +99,34 @@ public class AuthorService : IAuthorService
         {
             Console.WriteLine(e);
             return null;
+        }
+    }
+
+    public async Task<OperationResult<AuthorDetailDTO>> GetByIdAsync(int id)
+    {
+        try
+        {
+            var result = await _authorRepository.GetByIdAsync(id);
+            if (result == null)
+            {
+                return OperationResult<AuthorDetailDTO>.Failure(
+                    message: $"Cannot get the author with id {id}",
+                    statusCode: 200
+                );
+            }
+            
+            return OperationResult<AuthorDetailDTO>.Success(
+                data: _mapper.Map<AuthorDetailDTO>(result),
+                message: "Author search successfully." 
+            ); 
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"An unexpected error occurred while get the author with id {id}.");
+            return OperationResult<AuthorDetailDTO>.Failure(
+                message: "An unexpected server error occurred.",
+                statusCode: 500 
+            );
         }
     }
 }

@@ -17,10 +17,32 @@ public class AuthorController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<PageResult<List<AuthorListDTO>>>> GetAll(
-        [FromQuery] int pageIndex = 1, 
+        [FromQuery] int pageIndex = 1,
         [FromQuery] int pageSize = 10)
     {
         return Ok(await _authorService.GetAllAsync(pageIndex, pageSize));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<AuthorDetailDTO>> GetById(int id)
+    {
+        var result = await _authorService.GetByIdAsync(id);
+
+        if (result.IsSuccess)
+        {
+            return StatusCode(result.StatusCode, result.Data); 
+        }
+        else
+        {
+            return StatusCode(
+                result.StatusCode, 
+                new 
+                { 
+                    Message = result.Message,
+                    Status = result.StatusCode
+                }
+            );
+        }
     }
 
     [HttpPost("add")]

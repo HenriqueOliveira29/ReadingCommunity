@@ -23,21 +23,41 @@ public class BookService : IBookService
         _logger = logger;
     }
 
-    public async Task<Book> AddAsync(Book book)
+    public async Task<OperationResult<BookDetailDTO>> AddAsync(BookCreateDTO bookDTO)
     {
         try
         {
-            Author? author= await _authorRepository.GetByIdAsync(book.AuthorId);
-            if (author == null)
+            Book bookEntity = _mapper.Map<Book>(bookDTO);
+            var result = await _bookRepository.AddAsync(bookEntity);
+            if (result == null)
             {
-                throw new ArgumentException($"Author {book.AuthorId} is not a valid author");
+                return OperationResult<BookDetailDTO>.Failure(
+                    message: "An unexpected server error occurred.",
+                    statusCode: 200
+                );
             }
-            return await _bookRepository.AddAsync(book);
+
+            var resultEntity = await _bookRepository.GetByIdAsync(result.Id);
+            if (resultEntity == null)
+            {
+                return OperationResult<BookDetailDTO>.Failure(
+                    message: $"Cannot get the Book with id {result.Id}",
+                    statusCode: 200
+                );
+            }
+            
+            return OperationResult<BookDetailDTO>.Success(
+                data: _mapper.Map<BookDetailDTO>(resultEntity),
+                message: "Book created successfully." 
+            ); 
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e.Message);
-            return book;
+            _logger.LogError(ex, "An unexpected error occurred while creating a book.");
+            return OperationResult<BookDetailDTO>.Failure(
+                message: "An unexpected server error occurred.",
+                statusCode: 500 
+            );
         }
     }
 
@@ -69,8 +89,31 @@ public class BookService : IBookService
         }
     }
 
-    public async Task<Book?> GetByIdAsync(int id)
+    public async Task<OperationResult<BookDetailDTO>> GetByIdAsync(int id)
     {
-        try { return await _bookRepository.GetByIdAsync(id); } catch (Exception e) { Console.WriteLine(e); return null; }
+        try
+        {
+            var result = await _bookRepository.GetByIdAsync(id);
+            if (result == null)
+            {
+                return OperationResult<BookDetailDTO>.Failure(
+                    message: $"Cannot get the Book with id {id}",
+                    statusCode: 200
+                );
+            }
+            
+            return OperationResult<BookDetailDTO>.Success(
+                data: _mapper.Map<BookDetailDTO>(result),
+                message: "Book search successfully." 
+            ); 
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"An unexpected error occurred while get the book with id {id}.");
+            return OperationResult<BookDetailDTO>.Failure(
+                message: "An unexpected server error occurred.",
+                statusCode: 500 
+            );
+        }
     }
 }
