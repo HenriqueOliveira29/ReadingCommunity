@@ -20,4 +20,11 @@ public class ReviewController : ControllerBase
         var result = await _reviewService.AddReview(reviewCreate);
         return StatusCode(result.StatusCode, result);
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<OperationResult>> Create(int id)
+    {
+        var result = await _reviewService.GetReviewsByBook(id);
+        return StatusCode(result.StatusCode, result);
+    }
 }

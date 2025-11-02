@@ -64,5 +64,33 @@ public class ReviewService: IReviewService
         }
     }
 
+    public async Task<OperationResult<List<ReviewDetailDTO>>> GetReviewsByBook(int bookId)
+    {
+        try
+        {
+            Book? book = await _bookRepository.GetByIdAsync(bookId);
+            if (book == null)
+            {
+                return OperationResult<List<ReviewDetailDTO>>.Failure(
+                   message: $"Book with the id ${bookId} doesnt exist",
+                   statusCode: 200
+               );
+            }
 
+            List<Review> reviews = await _reviewRepository.GetReviewByBook(bookId);
+            return OperationResult<List<ReviewDetailDTO>>.Success(
+                _mapper.Map<List<ReviewDetailDTO>>(reviews),
+                message: "Reviews fetched successfully."
+            );
+            
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error occurred while creating a review.");
+            return OperationResult<List<ReviewDetailDTO>>.Failure(
+                message: "An unexpected server error occurred.",
+                statusCode: 500
+            );
+        }
+    }
 }
