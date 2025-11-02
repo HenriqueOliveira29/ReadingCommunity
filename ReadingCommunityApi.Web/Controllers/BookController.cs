@@ -25,34 +25,14 @@ public class BookController : ControllerBase
     [HttpGet("{id}")]
     public async  Task<ActionResult<BookDetailDTO>> GetById(int id)
     {
-        return Ok(await _bookService.GetByIdAsync(id));
+        var result = await _bookService.GetByIdAsync(id);
+        return StatusCode(result.StatusCode, result);
     }
 
     [HttpPost("add")]
     public async Task<ActionResult<BookDetailDTO>> Add(BookCreateDTO bookDto)
     {
-        try
-        {
-            var result = await _bookService.AddAsync(bookDto);
-            if (result.IsSuccess)
-            {
-                return StatusCode(result.StatusCode, result.Data); 
-            }
-            else
-            {
-                return StatusCode(
-                    result.StatusCode, 
-                    new 
-                    { 
-                        Message = result.Message,
-                        Status = result.StatusCode
-                    }
-                );
-            }
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var result = await _bookService.AddAsync(bookDto);
+        return StatusCode(result.StatusCode, result);   
     }
 }

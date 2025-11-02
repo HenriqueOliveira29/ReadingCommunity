@@ -24,46 +24,16 @@ public class AuthorController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<AuthorDetailDTO>> GetById(int id)
+    public async Task<ActionResult<OperationResult<AuthorDetailDTO>>> GetById(int id)
     {
         var result = await _authorService.GetByIdAsync(id);
-
-        if (result.IsSuccess)
-        {
-            return StatusCode(result.StatusCode, result.Data); 
-        }
-        else
-        {
-            return StatusCode(
-                result.StatusCode, 
-                new 
-                { 
-                    Message = result.Message,
-                    Status = result.StatusCode
-                }
-            );
-        }
+        return StatusCode(result.StatusCode, result);
     }
 
     [HttpPost("add")]
-    public async Task<ActionResult<AuthorDetailDTO>> Add(AuthorCreateDTO authorDto)
+    public async Task<ActionResult<OperationResult<AuthorDetailDTO>>> Add(AuthorCreateDTO authorDto)
     {
         var result = await _authorService.AddAsync(authorDto);
-
-        if (result.IsSuccess)
-        {
-            return StatusCode(result.StatusCode, result.Data); 
-        }
-        else
-        {
-            return StatusCode(
-                result.StatusCode, 
-                new 
-                { 
-                    Message = result.Message,
-                    Status = result.StatusCode
-                }
-            );
-        }
+        return StatusCode(result.StatusCode, result);
     }
 }

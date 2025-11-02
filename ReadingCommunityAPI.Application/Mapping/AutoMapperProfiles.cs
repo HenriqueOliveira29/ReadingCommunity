@@ -17,7 +17,7 @@ public class AutoMapperProfiles : Profile
         CreateMap<Book, BookDetailDTO>()
         .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author.Name.ToString()))
         .ForMember(dest => dest.PublicationDate, opt => opt.MapFrom(src => src.PublictionDate.ToUniversalTime()));
-        
+
         CreateMap<Book, BookListDTO>().ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author.Name.ToString()));
 
         // Books Author
@@ -25,6 +25,15 @@ public class AutoMapperProfiles : Profile
         CreateMap<AuthorCreateDTO, Author>();
         CreateMap<Author, AuthorDetailDTO>();
 
-       
+
+        // Reviews
+
+        CreateMap<ReviewCreateDTO, Review>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => 1));        
+        CreateMap<Review, ReviewDetailDTO>()
+            .ForMember(dest => dest.BookName, opt => opt.MapFrom(src => src.Book.Title))
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username));
+
+
     }
 }
