@@ -6,6 +6,7 @@ using ReadingCommunityApi.Infrastructure.Repositories;
 using ReadingCommunityApi.Application.Interfaces;
 using ReadingCommunityApi.Application.Services;
 using ReadingCommunityApi.Application.Mapping;
+using ReadingCommunityApi.Application.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +71,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
