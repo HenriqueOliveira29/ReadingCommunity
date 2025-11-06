@@ -6,7 +6,7 @@ namespace ReadingCommunityApi.Application.Interfaces;
 
 public interface IAuthorService
 {
-    Task<PageResult<List<AuthorListDTO>>> GetAllAsync(int pageIndex = 1, int pageSize = 0);
+    Task<OperationResult<PageResult<List<AuthorListDTO>>>> GetAllAsync(int pageIndex = 1, int pageSize = 0);
     Task<OperationResult<AuthorDetailDTO>> GetByIdAsync(int id);
     Task<OperationResult<AuthorDetailDTO>> AddAsync(AuthorCreateDTO author);
 }

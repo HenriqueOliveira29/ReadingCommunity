@@ -49,7 +49,7 @@ public class GlobalExceptionHandlerMiddleware
                 StatusCode = 401,
                 Message = exception.Message
             },
-            DbUpdateException => new OperationResult  // ← Handle DB exceptions here
+            DbUpdateException => new OperationResult
             {
                 IsSuccess = false,
                 StatusCode = 500,
