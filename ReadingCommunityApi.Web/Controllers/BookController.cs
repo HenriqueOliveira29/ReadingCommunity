@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadingCommunityApi.Application.Dtos;
 using ReadingCommunityApi.Application.Interfaces;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class BookController : ControllerBase
 {
     private readonly IBookService _bookService;
