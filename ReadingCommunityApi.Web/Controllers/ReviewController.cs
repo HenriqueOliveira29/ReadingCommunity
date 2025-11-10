@@ -1,9 +1,12 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadingCommunityApi.Application.Dtos;
 using ReadingCommunityApi.Application.Interfaces;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ReviewController : ControllerBase
 {
     private readonly IReviewService _reviewService;
@@ -17,6 +20,8 @@ public class ReviewController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<OperationResult>> Create([FromBody] ReviewCreateDTO reviewCreate)
     {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        
         var result = await _reviewService.AddReview(reviewCreate);
         return StatusCode(result.StatusCode, result);
     }

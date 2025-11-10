@@ -1,18 +1,17 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace ReadingCommunityApi.Core.Models;
 
-public class User
+public class User : IdentityUser<int>
 {
-    public int Id { get; private set; }
-    public string Username { get; private set; }
-
-    public string Email { get; private set; }
-
-    public ICollection<Review> Reviews { get; private set; } = new List<Review>();
+   public DateTime CreatedAt { get; set; }
+   public ICollection<Review> Reviews { get; private set; } = new List<Review>();
 
     public User(string username, string email)
     {
-        this.Username = username;
+        this.UserName = username;
         this.Email = email;
+        this.CreatedAt = DateTime.UtcNow;
     }
 
     public void AddReview(Review review)

@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ReadingCommunityApi.Core.Models;
 
 namespace ReadingCommunityApi.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -12,10 +14,11 @@ public class ApplicationDbContext : DbContext
     public DbSet<Book> Books { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<Review> Reviews { get; set; }
-    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Review>(entity =>
         {
             entity.HasKey(r => r.Id);
@@ -30,7 +33,7 @@ public class ApplicationDbContext : DbContext
                   .WithMany(u => u.Reviews)
                   .HasForeignKey(r => r.UserId)
                   .IsRequired()
-                  .OnDelete(DeleteBehavior.Restrict);
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Author>(entity =>
@@ -54,6 +57,12 @@ public class ApplicationDbContext : DbContext
             entity.HasKey(u => u.Id);
         });
         
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<User>().ToTable("Users");
+        modelBuilder.Entity<IdentityRole<int>>().ToTable("Roles");
+        modelBuilder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");
+        modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
+        modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins");
+        modelBuilder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
+        modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims");
     }
 }

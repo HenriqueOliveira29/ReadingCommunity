@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadingCommunityApi.Application.Dto;
 using ReadingCommunityApi.Application.Dtos;
@@ -6,6 +7,7 @@ using ReadingCommunityApi.Application.Interfaces;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class AuthorController : ControllerBase
 {
     private readonly IAuthorService _authorService;
