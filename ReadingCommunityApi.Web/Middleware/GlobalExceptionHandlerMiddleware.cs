@@ -29,6 +29,12 @@ public class GlobalExceptionHandlerMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
+
+        if (context.Response.HasStarted)
+        {
+            return Task.CompletedTask;
+        }
+        
         var response = exception switch
         {
             NotFoundException => new OperationResult
@@ -54,6 +60,12 @@ public class GlobalExceptionHandlerMiddleware
                 IsSuccess = false,
                 StatusCode = 500,
                 Message = "A database error occurred"
+            },
+            InvalidOperationException => new OperationResult
+            {
+                IsSuccess = false,
+                StatusCode = 500,
+                Message = exception.Message
             },
             _ => new OperationResult
             {
