@@ -24,7 +24,7 @@ public class ReviewService: IReviewService
     }
 
 
-    public async Task<OperationResult> AddReview(ReviewCreateDTO reviewCreate)
+    public async Task<OperationResult> AddReview(ReviewCreateDTO reviewCreate, int userId)
     {
         try
         {
@@ -39,6 +39,7 @@ public class ReviewService: IReviewService
 
             //Validar com o user logado :TODO
             Review reviewEntity = _mapper.Map<Review>(reviewCreate);
+            reviewEntity.UserId = userId;
 
             Console.WriteLine($" lets sse {reviewEntity}");
             var result = await _reviewRepository.AddAsync(reviewEntity);

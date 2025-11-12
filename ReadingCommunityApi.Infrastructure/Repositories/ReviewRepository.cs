@@ -12,6 +12,6 @@ public class ReviewRepository : BaseRepository<Review> , IReviewRepository
     }
     public async Task<List<Review>> GetReviewByBook(int bookId)
     {
-        return await _context.Reviews.Where(r => r.BookId == bookId).ToListAsync();
+        return await _context.Reviews.Include(u => u.User).Include(b => b.Book).Where(r => r.BookId == bookId).ToListAsync();
     }
 }

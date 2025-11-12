@@ -22,7 +22,7 @@ public class ReviewController : ControllerBase
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         
-        var result = await _reviewService.AddReview(reviewCreate);
+        var result = await _reviewService.AddReview(reviewCreate, userId);
         return StatusCode(result.StatusCode, result);
     }
 
