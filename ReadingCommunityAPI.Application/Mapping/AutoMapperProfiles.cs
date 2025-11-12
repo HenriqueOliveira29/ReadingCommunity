@@ -32,7 +32,7 @@ public class AutoMapperProfiles : Profile
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => 1));        
         CreateMap<Review, ReviewDetailDTO>()
             .ForMember(dest => dest.BookName, opt => opt.MapFrom(src => src.Book.Title))
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username));
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
 
 
     }
