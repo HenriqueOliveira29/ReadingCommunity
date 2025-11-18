@@ -11,7 +11,7 @@ public class CommunityEvent
     public string Location { get; private set; }
 
     public int? BookId { get; private set; }
-    public Book Book { get; private set; }
+    public Book? Book { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
 

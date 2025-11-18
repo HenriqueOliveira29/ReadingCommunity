@@ -12,7 +12,7 @@ public class CommunityPost
     public string Content { get; private set; }
     public PostType Type { get; private set; }
     public int? BookId { get; private set; }
-    public Book Book { get; private set; }
+    public Book? Book { get; private set; }
 
     public DateTime PostedAt { get; private set; }
     public DateTime? EditedAt { get; private set; }

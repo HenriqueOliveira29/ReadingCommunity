@@ -14,10 +14,10 @@ public class Message
     
     // For book/review sharing
     public int? BookId { get; private set; }
-    public Book Book { get; private set; }
+    public Book? Book { get; private set; }
     
     public int? ReviewId { get; private set; }
-    public Review Review { get; private set; }
+    public Review? Review { get; private set; }
     
     // For file attachments
     public string AttachmentUrl { get; private set; }

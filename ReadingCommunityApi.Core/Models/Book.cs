@@ -7,7 +7,6 @@ public class Book
     public string Description { get; private set; }
     public DateTime PublicationDate { get; private set; }
     public string CoverImageUrl { get; private set; }
-    public ICollection<BookImage> Images { get; private set; } = new List<BookImage>();
     public int NumberOfPages { get; private set; }
     public decimal Width { get; private set; }
     public decimal Height { get; private set; }
@@ -16,6 +15,10 @@ public class Book
     public Author Author { get; private set; }
     public ICollection<Category> Categories { get; private set; } = new List<Category>();
     public ICollection<Review> Reviews { get; private set; } = new List<Review>();
+    public ICollection<BookImage> Images { get; private set; } = new List<BookImage>();
+    public ICollection<CommunityEvent> CommunityEvents { get; private set; } = new List<CommunityEvent>();
+    public ICollection<CommunityPost> CommunityPosts { get; private set; } = new List<CommunityPost>();
+    public ICollection<Message> MessagesReference { get; private set; } = new List<Message>();
 
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }

@@ -16,6 +16,8 @@ public class Review
     public int UserId { get; private set; }
     public User User { get; private set; }
 
+    public ICollection<Message> MessagesReference {get; private set;} = new List<Message>();
+
     public Review(int rating, string comment, Book book, User user)
     {
         this.Rating = rating;
@@ -23,6 +25,11 @@ public class Review
         this.Book = book;
         this.User = user;
         this.DatePosted = DateTime.Now;
+    }
+
+    public void SetUser(int userId)
+    {
+        this.UserId = userId;
     }
     
     private Review() {} //Empty Constructure to EF Core
