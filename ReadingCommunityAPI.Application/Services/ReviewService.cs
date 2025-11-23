@@ -39,7 +39,7 @@ public class ReviewService: IReviewService
 
             //Validar com o user logado :TODO
             Review reviewEntity = _mapper.Map<Review>(reviewCreate);
-            reviewEntity.UserId = userId;
+            reviewEntity.SetUser(userId);
 
             Console.WriteLine($" lets sse {reviewEntity}");
             var result = await _reviewRepository.AddAsync(reviewEntity);
