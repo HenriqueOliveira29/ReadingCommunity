@@ -5,7 +5,6 @@ using ReadingCommunityApi.Core.Interfaces;
 using ReadingCommunityApi.Infrastructure.Repositories;
 using ReadingCommunityApi.Application.Interfaces;
 using ReadingCommunityApi.Application.Services;
-using ReadingCommunityApi.Application.Mapping;
 using ReadingCommunityApi.Application.Middleware;
 using ReadingCommunityApi.Core.Models;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using ReadingCommunityApi.Application.Interfaces.mappers;
+using ReadingCommunityApi.Application.mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,15 +81,15 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
+//Mappers
+builder.Services.AddScoped<IBookMapper, BookMapper>();
+
 //Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
-
-//AutoMappper
-builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
