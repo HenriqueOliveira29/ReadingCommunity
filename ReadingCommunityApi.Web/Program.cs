@@ -83,6 +83,8 @@ builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 //Mappers
 builder.Services.AddScoped<IBookMapper, BookMapper>();
+builder.Services.AddScoped<IReviewMapper, ReviewMapper>();
+builder.Services.AddScoped<IAuthorMapper, AuthorMapper>();
 
 //Services
 builder.Services.AddScoped<IAuthService, AuthService>();
