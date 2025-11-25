@@ -1,8 +1,7 @@
-using AutoMapper;
-using Microsoft.Extensions.Logging;
 using ReadingCommunityApi.Application.Dtos;
 using ReadingCommunityApi.Application.Exceptions;
 using ReadingCommunityApi.Application.Interfaces;
+using ReadingCommunityApi.Application.Interfaces.mappers;
 using ReadingCommunityApi.Core.Interfaces;
 using ReadingCommunityApi.Core.Models;
 
@@ -12,9 +11,10 @@ public class BookService : IBookService
 {
     private readonly IBookRepository _bookRepository;
     private readonly IAuthorRepository _authorRepository;
-    private readonly IMapper _mapper;
+    
+    private readonly IBookMapper _mapper;
 
-    public BookService(IBookRepository bookRepository, IAuthorRepository authorRepository, IMapper mapper)
+    public BookService(IBookRepository bookRepository, IAuthorRepository authorRepository, IBookMapper mapper)
     {
         _bookRepository = bookRepository;
         _authorRepository = authorRepository;
@@ -29,13 +29,13 @@ public class BookService : IBookService
             throw new NotFoundException($"Cannot find the author with id {bookDTO.AuthorId}");
         }
 
-        Book bookEntity = _mapper.Map<Book>(bookDTO);
+        Book bookEntity = _mapper.MapToEntity(bookDTO);
         var result = await _bookRepository.AddAsync(bookEntity);
 
         var resultEntity = await _bookRepository.GetByIdAsync(result.Id);
 
         return OperationResult<BookDetailDTO>.Success(
-            data: _mapper.Map<BookDetailDTO>(resultEntity),
+            data: _mapper.MapToDetailDto(resultEntity),
             message: "Book created successfully."
         );
     }
@@ -51,7 +51,7 @@ public class BookService : IBookService
 
         var data = new PageResult<List<BookListDTO>>
         {
-            Items = _mapper.Map<List<BookListDTO>>(books),
+            Items = books.Select(b => _mapper.MapToListDto(b)).ToList(),
             TotalCount = totalCount,
             PageIndex = pageIndex,
             PageSize = pageSize
@@ -73,7 +73,7 @@ public class BookService : IBookService
         }
         
         return OperationResult<BookDetailDTO>.Success(
-            data: _mapper.Map<BookDetailDTO>(result),
+            data: _mapper.MapToDetailDto(result),
             message: "Book search successfully." 
         ); 
     }

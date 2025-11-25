@@ -7,4 +7,6 @@ public class BookListDTO
     public string Description { get; set; } = "";
     public DateTime PublicationDate { get; set; }
     public string AuthorName { get; set; } = "";
+    public List<string> Categories { get; set; } = new List<string>();
+
 }

@@ -18,12 +18,12 @@ public class Review
 
     public ICollection<Message> MessagesReference {get; private set;} = new List<Message>();
 
-    public Review(int rating, string comment, Book book, User user)
+    public Review(int rating, string comment, int bookId, int userid)
     {
         this.Rating = rating;
         this.Comment = comment;
-        this.Book = book;
-        this.User = user;
+        this.BookId = bookId;
+        this.UserId = userid;
         this.DatePosted = DateTime.Now;
     }
 

@@ -8,4 +8,10 @@ public class BookDetailDTO
     public string AuthorName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public DateTime PublicationDate { get; set; }
+    public string CoverImageUrl { get; set; } = string.Empty;
+    public int NumberOfPages { get; set; }
+    public string Dimensions {get; set; } = string.Empty;
+    public List<ReviewDetailDTO> Reviews { get; set; } = new List<ReviewDetailDTO>();
+    public List<string> Images { get; set; } = new List<string>();
+    public List<string> Categories { get; set; } = new List<string>();
 }

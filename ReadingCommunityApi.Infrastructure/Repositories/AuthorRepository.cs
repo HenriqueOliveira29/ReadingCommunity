@@ -18,7 +18,7 @@ public class AuthorRepository : BaseRepository<Author>, IAuthorRepository
 
     public async Task<IEnumerable<Author>> GetAllAsync(int skip, int take)
     {
-        return await _context.Authors.OrderBy(a => a.Id).Skip(skip).Take(take).ToListAsync();
+        return await _context.Authors.Include(b => b.Books).OrderBy(a => a.Id).Skip(skip).Take(take).ToListAsync();
     }
 
     public async Task<Author?> Exist(int id)
