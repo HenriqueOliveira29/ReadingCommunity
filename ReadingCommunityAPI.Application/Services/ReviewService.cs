@@ -4,6 +4,7 @@ using AutoMapper.Configuration.Annotations;
 using Microsoft.Extensions.Logging;
 using ReadingCommunityApi.Application.Dtos;
 using ReadingCommunityApi.Application.Interfaces;
+using ReadingCommunityApi.Application.Interfaces.mappers;
 using ReadingCommunityApi.Core.Interfaces;
 using ReadingCommunityApi.Core.Models;
 
@@ -13,9 +14,9 @@ public class ReviewService: IReviewService
 {
     private readonly IReviewRepository _reviewRepository;
     private readonly IBookRepository _bookRepository;
-    private readonly IMapper _mapper;
+    private readonly IReviewMapper _mapper;
     private readonly ILogger<ReviewService> _logger;
-    public ReviewService(IReviewRepository reviewRepository, IBookRepository bookRepository, IMapper mapper, ILogger<ReviewService> logger)
+    public ReviewService(IReviewRepository reviewRepository, IBookRepository bookRepository, IReviewMapper mapper, ILogger<ReviewService> logger)
     {
         _reviewRepository = reviewRepository;
         _bookRepository = bookRepository;
@@ -38,7 +39,7 @@ public class ReviewService: IReviewService
             }
 
             //Validar com o user logado :TODO
-            Review reviewEntity = _mapper.Map<Review>(reviewCreate);
+            Review reviewEntity = _mapper.MapToEntity(reviewCreate, userId);
             reviewEntity.SetUser(userId);
 
             Console.WriteLine($" lets sse {reviewEntity}");
@@ -80,7 +81,7 @@ public class ReviewService: IReviewService
 
             List<Review> reviews = await _reviewRepository.GetReviewByBook(bookId);
             return OperationResult<List<ReviewDetailDTO>>.Success(
-                _mapper.Map<List<ReviewDetailDTO>>(reviews),
+                reviews.Select(r => _mapper.MapToDetailDto(r)).ToList(),
                 message: "Reviews fetched successfully."
             );
             

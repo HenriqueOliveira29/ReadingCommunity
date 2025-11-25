@@ -1,9 +1,8 @@
-using AutoMapper;
-using Microsoft.Extensions.Logging;
 using ReadingCommunityApi.Application.Dto;
 using ReadingCommunityApi.Application.Dtos;
 using ReadingCommunityApi.Application.Exceptions;
 using ReadingCommunityApi.Application.Interfaces;
+using ReadingCommunityApi.Application.Interfaces.mappers;
 using ReadingCommunityApi.Core.Interfaces;
 using ReadingCommunityApi.Core.Models;
 
@@ -12,9 +11,9 @@ namespace ReadingCommunityApi.Application.Services;
 public class AuthorService : IAuthorService
 {
     private readonly IAuthorRepository _authorRepository;
-    private readonly IMapper _mapper;
+    private readonly IAuthorMapper _mapper;
 
-    public AuthorService(IAuthorRepository authorRepository, IMapper mapper)
+    public AuthorService(IAuthorRepository authorRepository, IAuthorMapper mapper)
     {
         _authorRepository = authorRepository;
         _mapper = mapper;
@@ -22,7 +21,7 @@ public class AuthorService : IAuthorService
 
     public async Task<OperationResult<AuthorDetailDTO>> AddAsync(AuthorCreateDTO author)
     {
-        Author authorEntity = _mapper.Map<Author>(author);
+        Author authorEntity = _mapper.MapToEntity(author);
         var result = await _authorRepository.AddAsync(authorEntity);
 
         var resultEntity = await _authorRepository.GetByIdAsync(result.Id);
@@ -32,7 +31,7 @@ public class AuthorService : IAuthorService
         }
         
         return OperationResult<AuthorDetailDTO>.Success(
-            data: _mapper.Map<AuthorDetailDTO>(resultEntity),
+            data: _mapper.MapToDetailDto(resultEntity),
             message: "Author created successfully." 
         ); 
         
@@ -49,11 +48,9 @@ public class AuthorService : IAuthorService
 
         var authorEntities = await _authorRepository.GetAllAsync(skip, pageSize);
 
-        var authorsDTO = _mapper.Map<List<AuthorListDTO>>(authorEntities);
-
         var data = new PageResult<List<AuthorListDTO>>
         {
-            Items = authorsDTO,
+            Items = authorEntities.Select(a => _mapper.MapToListDto(a)).ToList(),
             TotalCount = totalCount,
             PageIndex = pageIndex,
             PageSize = pageSize
@@ -75,7 +72,7 @@ public class AuthorService : IAuthorService
             }
             
             return OperationResult<AuthorDetailDTO>.Success(
-                data: _mapper.Map<AuthorDetailDTO>(result),
+                data: _mapper.MapToDetailDto(result),
                 message: "Author search successfully." 
             ); 
     }
