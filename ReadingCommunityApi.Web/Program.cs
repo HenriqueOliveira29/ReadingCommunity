@@ -80,11 +80,15 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IWishListCollectionRepository, WishListCollectionReposotory>();
+builder.Services.AddScoped<IWishListItemRepository, WishListItemRepository>();
 
 //Mappers
 builder.Services.AddScoped<IBookMapper, BookMapper>();
 builder.Services.AddScoped<IReviewMapper, ReviewMapper>();
 builder.Services.AddScoped<IAuthorMapper, AuthorMapper>();
+builder.Services.AddScoped<IWishListCollectionMapper, WishListCollectionMapper>();
+builder.Services.AddScoped<IWishListItemMapper, WishListItemMapper>();
 
 //Services
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -92,6 +96,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IWishListCollectionService, WishlistCollectionService>();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();

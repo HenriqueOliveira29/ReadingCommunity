@@ -13,6 +13,7 @@ public class Book
     public decimal Depth { get; private set; }
     public int AuthorId { get; private set; }
     public Author Author { get; private set; }
+    public ICollection<WishlistItem> WishlistItems { get; private set; } = new List<WishlistItem>();
     public ICollection<Category> Categories { get; private set; } = new List<Category>();
     public ICollection<Review> Reviews { get; private set; } = new List<Review>();
     public ICollection<BookImage> Images { get; private set; } = new List<BookImage>();

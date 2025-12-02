@@ -42,7 +42,7 @@ public class WishlistCollection
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void AddBook(Book book, int priority = 2, string notes = null)
+    public void AddBook(Book book, int priority = 2, string notes = "")
     {
         var item = new WishlistItem(Id, book.Id, priority, notes);
         Items.Add(item);
