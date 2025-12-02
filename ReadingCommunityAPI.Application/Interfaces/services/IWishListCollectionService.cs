@@ -9,4 +9,6 @@ public interface IWishListCollectionService
     Task<OperationResult> CreateWishListCollection(WishlistCollectionCreateDTO dto, int userId);
 
     Task<OperationResult<WishlistCollectionDetailDTO>> GetWishListCollectionById(int id, int userId);
+
+    Task<OperationResult> WishListCollectionAddItem(WishListItemCreateDTO dto, int userId);
 }

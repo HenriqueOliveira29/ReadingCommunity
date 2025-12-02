@@ -13,11 +13,11 @@ public class WishListCollectionReposotory : BaseRepository<WishlistCollection> ,
 
     public async Task<WishlistCollection?> GetWishlistCollectionById(int Id)
     {
-        return await _context.WishlistCollections.Include(w => w.Items).Where(u => u.Id == Id).FirstOrDefaultAsync();
+        return await _context.WishlistCollections.Include(w => w.Items).ThenInclude(b => b.Book).ThenInclude(a => a.Author).Where(u => u.Id == Id).FirstOrDefaultAsync();
     }
 
     public async Task<List<WishlistCollection>> GetWishlistCollectionsByUser(int userId)
     {
-        return await _context.WishlistCollections.Where(u => u.UserId == userId).ToListAsync();
+        return await _context.WishlistCollections.Include(i => i.Items).Where(u => u.UserId == userId).ToListAsync();
     }
 }

@@ -40,4 +40,12 @@ public class WishlistCollectionController : ControllerBase
         var result = await _wishListCollectionService.CreateWishListCollection(dto, userId);
         return StatusCode(result.StatusCode, result);   
     }
+
+    [HttpPost("addItem")]
+    public async Task<ActionResult<OperationResult>> WishListCollectionAddItem(WishListItemCreateDTO dto)
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var result = await _wishListCollectionService.WishListCollectionAddItem(dto, userId);
+        return StatusCode(result.StatusCode, result);   
+    }
 }
