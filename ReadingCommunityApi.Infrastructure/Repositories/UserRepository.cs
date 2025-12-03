@@ -12,9 +12,9 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     {
         
     }
-    public async Task<List<User>> GetAll(string? searchBy = null)
+    public async Task<List<User>> GetAll(int userId, string? searchBy = null)
     {
-        var query = _context.Users.AsQueryable();
+        var query = _context.Users.Where(u => u.Id != userId).AsQueryable();
 
         if(searchBy != null)
         {

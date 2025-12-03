@@ -20,13 +20,24 @@ public class UserService : IUserService
     }
     public async Task<OperationResult> FollowUser(int id, int userId)
     {
+        if (id == userId)
+        {
+            throw new ValidationException("You cannot follow yourself");
+        }
+        
         var userToFollow = await _userRepository.GetById(id);
         if(userToFollow == null)
         {
             throw new NotFoundException($"User with the id {id} not found");
         }
 
-        UserFollow userFollow = new UserFollow(id, userId);
+        var userFollow = await _userFollowRepository.GetByIds(id, userId);
+        if(userFollow != null)
+        {
+            throw new ValidationException("You already follow this user");
+        }
+
+        userFollow = new UserFollow(id, userId);
 
         var result = await _userFollowRepository.AddAsync(userFollow);
         if (result == null)
@@ -39,9 +50,9 @@ public class UserService : IUserService
         );
     }
 
-    public async Task<OperationResult<List<UserListDTO>>> GetAll(string? searchBy = null)
+    public async Task<OperationResult<List<UserListDTO>>> GetAll(int userId, string? searchBy = null)
     {
-        var users = await _userRepository.GetAll(searchBy);
+        var users = await _userRepository.GetAll(userId, searchBy);
         return OperationResult<List<UserListDTO>>.Success(users.Select(u => _userMapper.MapToListDTO(u)).ToList());
     }
 

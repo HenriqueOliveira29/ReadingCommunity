@@ -14,7 +14,7 @@ public class UserFollow
     
     private UserFollow() { } // EF Core
     
-    public UserFollow(int followerId, int followingId)
+    public UserFollow(int followingId, int followerId)
     {
         FollowerId = followerId;
         FollowingId = followingId;
