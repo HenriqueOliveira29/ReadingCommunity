@@ -188,7 +188,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
         // WishlistItem - Book (Many-to-One)
         modelBuilder.Entity<WishlistItem>()
             .HasOne(wi => wi.Book)
-            .WithMany()
+            .WithMany(b => b.WishlistItems)
             .HasForeignKey(wi => wi.BookId)
             .OnDelete(DeleteBehavior.Cascade);
 
