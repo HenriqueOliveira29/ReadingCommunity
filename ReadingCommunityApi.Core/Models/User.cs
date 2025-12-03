@@ -29,6 +29,8 @@ public class User : IdentityUser<int>
         this.UserName = username;
         this.Email = email;
         this.CreatedAt = DateTime.UtcNow;
+        this.Bio = "";
+        this.ProfileImageUrl = "";
     }
 
     public void AddReview(Review review)
