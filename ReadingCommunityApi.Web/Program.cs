@@ -14,8 +14,74 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using ReadingCommunityApi.Application.Interfaces.mappers;
 using ReadingCommunityApi.Application.mappers;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Logs;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var serviceName = Environment.GetEnvironmentVariable("OTEL_SERVICE_NAME") ?? "otelcol-contrib";
+var otlpEndpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT") ?? "http://localhost:4317";
+
+// Configure OpenTelemetry
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource
+        .AddService(serviceName: serviceName, serviceVersion: "1.0.0")
+        .AddAttributes(new Dictionary<string, object>
+        {
+            ["deployment.environment"] = builder.Environment.EnvironmentName,
+            ["host.name"] = Environment.MachineName
+        }))
+    .WithTracing(tracing => tracing
+        .AddAspNetCoreInstrumentation(options =>
+        {
+            options.RecordException = true;
+            options.EnrichWithHttpRequest = (activity, httpRequest) =>
+            {
+                activity.SetTag("http.client_ip", httpRequest.HttpContext.Connection.RemoteIpAddress);
+                activity.SetTag("http.request_content_type", httpRequest.ContentType);
+            };
+            options.EnrichWithHttpResponse = (activity, httpResponse) =>
+            {
+                activity.SetTag("http.response_content_type", httpResponse.ContentType);
+            };
+        })
+        .AddHttpClientInstrumentation()
+        .AddEntityFrameworkCoreInstrumentation() // If using EF Core
+        .AddSource(serviceName)
+        .AddOtlpExporter(options =>
+        {
+            options.Endpoint = new Uri(otlpEndpoint);
+        }))
+    .WithMetrics(metrics => metrics
+        .AddRuntimeInstrumentation()
+        .AddProcessInstrumentation()
+        .AddMeter(serviceName)
+        .AddMeter("Microsoft.AspNetCore.Hosting")
+        .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
+        .AddOtlpExporter(options =>
+        {
+            options.Endpoint = new Uri(otlpEndpoint);
+        }));
+
+// Configure logging with OpenTelemetry
+builder.Logging.AddOpenTelemetry(logging =>
+{
+    logging.IncludeFormattedMessage = true;
+    logging.IncludeScopes = true;
+    logging.ParseStateValues = true;
+    logging.AddOtlpExporter(options =>
+    {
+        options.Endpoint = new Uri(otlpEndpoint);
+    });
+});
+
+// Register custom services
+builder.Services.AddSingleton<ActivitySource>(sp => new ActivitySource(serviceName));
+builder.Services.AddSingleton<Meter>(sp => new Meter(serviceName));
 
 builder.Services
     .AddControllers()
