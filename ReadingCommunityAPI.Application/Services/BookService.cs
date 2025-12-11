@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using ReadingCommunityApi.Application.Dtos;
 using ReadingCommunityApi.Application.Exceptions;
 using ReadingCommunityApi.Application.Interfaces;
@@ -11,7 +13,6 @@ public class BookService : IBookService
 {
     private readonly IBookRepository _bookRepository;
     private readonly IAuthorRepository _authorRepository;
-    
     private readonly IBookMapper _mapper;
 
     public BookService(IBookRepository bookRepository, IAuthorRepository authorRepository, IBookMapper mapper)

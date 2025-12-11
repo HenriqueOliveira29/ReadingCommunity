@@ -1,0 +1,9 @@
+server:
+  http_listen_port: 3500
+
+otlp:
+  protocols:
+    http:
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
