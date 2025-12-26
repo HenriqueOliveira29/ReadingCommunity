@@ -111,6 +111,14 @@ services:
       - loki
     networks:
       - otel-network
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass GIWSIOar6VqGqm
+    volumes: 
+      - cache-data:/data
 
 volumes:
   pgdata:
@@ -118,6 +126,7 @@ volumes:
   prometheus-data:
   grafana-data:
   loki-data:
+  cache-data:
 
 networks:
   otel-network:
