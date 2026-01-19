@@ -1,3 +1,4 @@
+namespace ReadingCommunityApi.Application.Interfaces;
 public interface ICacheService
 {
     Task<T?> GetDataAsync<T>(string key);

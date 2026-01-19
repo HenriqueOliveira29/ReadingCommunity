@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Caching.Distributed;
+using ReadingCommunityApi.Application.Interfaces;
 using System.Text.Json;
 
 public class CacheService : ICacheService

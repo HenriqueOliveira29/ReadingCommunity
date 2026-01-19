@@ -13,10 +13,13 @@ public class AuthorService : IAuthorService
     private readonly IAuthorRepository _authorRepository;
     private readonly IAuthorMapper _mapper;
 
-    public AuthorService(IAuthorRepository authorRepository, IAuthorMapper mapper)
+    private readonly ICacheService _cacheService;
+
+    public AuthorService(IAuthorRepository authorRepository, IAuthorMapper mapper, ICacheService cacheService)
     {
         _authorRepository = authorRepository;
         _mapper = mapper;
+        _cacheService = cacheService;
     }
 
     public async Task<OperationResult<AuthorDetailDTO>> AddAsync(AuthorCreateDTO author)
@@ -29,6 +32,8 @@ public class AuthorService : IAuthorService
         {
             throw new NotFoundException($"Cannot find the author with id {resultEntity?.Id}");
         }
+
+        await _cacheService.SetDataAsync<Author>($"book_{resultEntity.Id}", resultEntity);
         
         return OperationResult<AuthorDetailDTO>.Success(
             data: _mapper.MapToDetailDto(resultEntity),
@@ -41,6 +46,19 @@ public class AuthorService : IAuthorService
     {
         pageIndex = Math.Max(1, pageIndex);
         pageSize = Math.Max(1, pageSize);
+
+        string cacheKey = $"authors_page_{pageIndex}_size_{pageSize}";
+
+        var cachedData = await _cacheService.GetDataAsync<PageResult<List<AuthorListDTO>>>(cacheKey);
+
+        if (cachedData != null)
+        {
+            return OperationResult<PageResult<List<AuthorListDTO>>>.Success(
+                cachedData,
+                "Authors retrieved from cache",
+                statusCode: 200
+            );
+        }
 
         int totalCount = await _authorRepository.GetTotalCountAsync();
 
@@ -56,6 +74,8 @@ public class AuthorService : IAuthorService
             PageSize = pageSize
         };
 
+        await _cacheService.SetDataAsync(cacheKey, data, TimeSpan.FromMinutes(10));
+
         return OperationResult<PageResult<List<AuthorListDTO>>>.Success(
             data,
             "Authors retrieved successfully",
@@ -65,6 +85,15 @@ public class AuthorService : IAuthorService
 
     public async Task<OperationResult<AuthorDetailDTO>> GetByIdAsync(int id)
     {
+            var authorCached = await _cacheService.GetDataAsync<Author>($"author_{id}");
+            if(authorCached != null)
+            {
+                return OperationResult<AuthorDetailDTO>.Success(
+                    data: _mapper.MapToDetailDto(authorCached),
+                    message: "Book search successfully." 
+                ); 
+            }
+
             var result = await _authorRepository.GetByIdAsync(id);
             if (result == null)
             {

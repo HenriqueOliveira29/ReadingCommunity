@@ -36,7 +36,7 @@ public class BookService : IBookService
         Book bookEntity = _mapper.MapToEntity(bookDTO);
         var result = await _bookRepository.AddAsync(bookEntity);
 
-        await _cache.SetDataAsync<Book>($"product_{result.Id}", result);
+        await _cache.SetDataAsync<Book>($"book_{result.Id}", result);
 
         return OperationResult<BookDetailDTO>.Success(
             data: _mapper.MapToDetailDto(result),
@@ -49,6 +49,19 @@ public class BookService : IBookService
         pageIndex = Math.Max(1, pageIndex);
         pageSize = Math.Clamp(pageSize, 1, 100);
 
+        string cacheKey = $"books_page_{pageIndex}_size_{pageSize}";
+
+        var cachedData = await _cache.GetDataAsync<PageResult<List<BookListDTO>>>(cacheKey);
+
+        if (cachedData != null)
+        {
+            return OperationResult<PageResult<List<BookListDTO>>>.Success(
+                cachedData,
+                "Books retrieved from cache",
+                statusCode: 200
+            );
+        }
+
         int totalCount = await _bookRepository.GetTotalCountAsync();
         int skip = (pageIndex - 1) * pageSize;
         var books = await _bookRepository.GetAllAsync(skip, pageSize);
@@ -60,6 +73,8 @@ public class BookService : IBookService
             PageIndex = pageIndex,
             PageSize = pageSize
         };
+
+        await _cache.SetDataAsync(cacheKey, data, TimeSpan.FromMinutes(10));
 
         return OperationResult<PageResult<List<BookListDTO>>>.Success(
             data,

@@ -5,7 +5,7 @@ using ReadingCommunityApi.Core.Interfaces;
 using ReadingCommunityApi.Application.Interfaces.mappers;
 using ReadingCommunityApi.Application.Dtos;
 using ReadingCommunityApi.Core.Models;
-using ReadingCommunityApi.Application.Exceptions;
+using ReadingCommunityApi.Application.Interfaces;
 
 namespace ReadingCommunityAPI.Tests;
 public class BookServiceTests
@@ -13,6 +13,7 @@ public class BookServiceTests
     private readonly Mock<IBookRepository> _mockBookRepo;
     private readonly Mock<IAuthorRepository> _mockAuthorRepo;
     private readonly Mock<IBookMapper> _mockMapper;
+    private readonly Mock<ICacheService> _mockCache;
     private readonly BookService _bookService;
 
     public BookServiceTests()
@@ -20,11 +21,13 @@ public class BookServiceTests
         _mockBookRepo = new Mock<IBookRepository>();
         _mockAuthorRepo = new Mock<IAuthorRepository>();
         _mockMapper = new Mock<IBookMapper>();
+        _mockCache = new Mock<ICacheService>();
         
         _bookService = new BookService(
             _mockBookRepo.Object, 
             _mockAuthorRepo.Object, 
-            _mockMapper.Object);
+            _mockMapper.Object,
+            _mockCache.Object);
     }
 
     [Fact]
@@ -52,7 +55,7 @@ public class BookServiceTests
             .Setup(m => m.MapToEntity(bookDto))
             .Returns(bookEntity);
 
-        // 3. Setup BookRepo.AddAsync to return the created entity (usually with a generated ID)
+        // 3. Setup BookRepo.AddAsync to return the created entity (usually witQh a generated ID)
         _mockBookRepo
             .Setup(r => r.AddAsync(bookEntity))
             .ReturnsAsync(bookEntity);
