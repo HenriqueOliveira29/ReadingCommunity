@@ -140,6 +140,12 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "ReadCommunityApp_";
+});
+
 builder.Services.AddAuthorization();
 
 //Repositories
@@ -167,6 +173,7 @@ builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IWishListCollectionService, WishlistCollectionService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();

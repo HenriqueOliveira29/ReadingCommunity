@@ -15,11 +15,14 @@ public class BookService : IBookService
     private readonly IAuthorRepository _authorRepository;
     private readonly IBookMapper _mapper;
 
-    public BookService(IBookRepository bookRepository, IAuthorRepository authorRepository, IBookMapper mapper)
+    private readonly ICacheService _cache;
+
+    public BookService(IBookRepository bookRepository, IAuthorRepository authorRepository, IBookMapper mapper, ICacheService cache)
     {
         _bookRepository = bookRepository;
         _authorRepository = authorRepository;
         _mapper = mapper;
+        _cache = cache;
     }
 
     public async Task<OperationResult<BookDetailDTO>> AddAsync(BookCreateDTO bookDTO)
@@ -33,10 +36,10 @@ public class BookService : IBookService
         Book bookEntity = _mapper.MapToEntity(bookDTO);
         var result = await _bookRepository.AddAsync(bookEntity);
 
-        var resultEntity = await _bookRepository.GetByIdAsync(result.Id);
+        await _cache.SetDataAsync<Book>($"book_{result.Id}", result);
 
         return OperationResult<BookDetailDTO>.Success(
-            data: _mapper.MapToDetailDto(resultEntity),
+            data: _mapper.MapToDetailDto(result),
             message: "Book created successfully."
         );
     }
@@ -45,6 +48,19 @@ public class BookService : IBookService
     {
         pageIndex = Math.Max(1, pageIndex);
         pageSize = Math.Clamp(pageSize, 1, 100);
+
+        string cacheKey = $"books_page_{pageIndex}_size_{pageSize}";
+
+        var cachedData = await _cache.GetDataAsync<PageResult<List<BookListDTO>>>(cacheKey);
+
+        if (cachedData != null)
+        {
+            return OperationResult<PageResult<List<BookListDTO>>>.Success(
+                cachedData,
+                "Books retrieved from cache",
+                statusCode: 200
+            );
+        }
 
         int totalCount = await _bookRepository.GetTotalCountAsync();
         int skip = (pageIndex - 1) * pageSize;
@@ -58,6 +74,8 @@ public class BookService : IBookService
             PageSize = pageSize
         };
 
+        await _cache.SetDataAsync(cacheKey, data, TimeSpan.FromMinutes(10));
+
         return OperationResult<PageResult<List<BookListDTO>>>.Success(
             data,
             "Books retrieved successfully",
@@ -67,6 +85,15 @@ public class BookService : IBookService
 
     public async Task<OperationResult<BookDetailDTO>> GetByIdAsync(int id)
     {
+        var bookCached = await _cache.GetDataAsync<Book>($"book_{id}");
+        if(bookCached != null)
+        {
+            return OperationResult<BookDetailDTO>.Success(
+                data: _mapper.MapToDetailDto(bookCached),
+                message: "Book search successfully." 
+            ); 
+        }
+        
         var result = await _bookRepository.GetByIdAsync(id);
         if (result == null)
         {
