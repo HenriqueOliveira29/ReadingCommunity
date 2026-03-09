@@ -1,25 +1,26 @@
 
-using Microsoft.EntityFrameworkCore;
-using ReadingCommunityApi.Infrastructure.Data;
-using ReadingCommunityApi.Core.Interfaces;
-using ReadingCommunityApi.Infrastructure.Repositories;
-using ReadingCommunityApi.Application.Interfaces;
-using ReadingCommunityApi.Application.Services;
-using ReadingCommunityApi.Application.Middleware;
-using ReadingCommunityApi.Core.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
-using ReadingCommunityApi.Application.Interfaces.mappers;
-using ReadingCommunityApi.Application.mappers;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using ReadingCommunityApi.Application.Interfaces;
+using ReadingCommunityApi.Application.Interfaces.mappers;
+using ReadingCommunityApi.Application.mappers;
+using ReadingCommunityApi.Application.Middleware;
+using ReadingCommunityApi.Application.Services;
+using ReadingCommunityApi.Core.Interfaces;
+using ReadingCommunityApi.Core.Models;
+using ReadingCommunityApi.Infrastructure.Data;
+using ReadingCommunityApi.Infrastructure.Repositories;
+using ReadingCommunityApi.Web;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Logs;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -218,6 +219,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddSignalR();
+
 
 
 var app = builder.Build();
@@ -252,6 +255,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.MapControllers();
 

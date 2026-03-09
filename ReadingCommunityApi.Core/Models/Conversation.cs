@@ -71,6 +71,11 @@ public class Conversation
             Participants.Remove(participant);
         }
     }
+
+    public void AddMessage(int senderId, string content)
+    {
+        this.Messages.Add(new Message(this.Id, senderId, content));
+    }
 }
 
 public enum ConversationType
