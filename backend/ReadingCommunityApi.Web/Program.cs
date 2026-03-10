@@ -149,6 +149,25 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 builder.Services.AddAuthorization();
 
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:3001",   // Frontend dev port (HTTP)
+                "https://localhost:3001",  // Frontend dev port (HTTPS)
+                "http://localhost:5173",   // Vite default dev port (HTTP)
+                "https://localhost:5173",  // Vite default dev port (HTTPS)
+                "http://localhost:3000",   // Local dev port (HTTP)
+                "https://localhost:3000"   // Local dev port (HTTPS)
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();  // Important for SignalR and cookies
+    });
+});
+
 //Repositories
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
@@ -157,6 +176,7 @@ builder.Services.AddScoped<IWishListCollectionRepository, WishListCollectionRepo
 builder.Services.AddScoped<IWishListItemRepository, WishListItemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserFollowRepository, UserFollowRepository>();
+builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
 
 //Mappers
 builder.Services.AddScoped<IBookMapper, BookMapper>();
@@ -175,6 +195,7 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IWishListCollectionService, WishlistCollectionService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<IConversationService, ConversationService>();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -251,7 +272,10 @@ app.UseMiddleware<RequestTelemetryMiddleware>();
 
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
+app.UseCors("AllowFrontend");
+
 app.UseHttpsRedirection();
+
 app.UseAuthentication();
 
 app.UseAuthorization();

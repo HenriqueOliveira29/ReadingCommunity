@@ -3,14 +3,13 @@ using ReadingCommunityApi.Application.Exceptions;
 using ReadingCommunityApi.Application.Interfaces;
 using ReadingCommunityApi.Core.Interfaces;
 using ReadingCommunityApi.Core.Models;
-using ReadingCommunityAPI.Application.Interfaces.services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReadingCommunityAPI.Application.Services
+namespace ReadingCommunityApi.Application.Services
 {
     public class ConversationService : IConversationService
     {
@@ -50,7 +49,7 @@ namespace ReadingCommunityAPI.Application.Services
 
             await _conversationRepository.UpdateAsync(conversation);
 
-            return OperationResult.Success("Sended with success");
+            return OperationResult.Success("Message sent successfully");
         }
     }
 }

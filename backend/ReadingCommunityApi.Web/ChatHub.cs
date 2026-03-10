@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using ReadingCommunityApi.Application.Interfaces;
 using ReadingCommunityApi.Core.Models;
 using ReadingCommunityApi.Infrastructure.Data;
-using ReadingCommunityAPI.Application.Interfaces.services;
 using System.Security.Claims;
 
 namespace ReadingCommunityApi.Web
@@ -28,8 +28,8 @@ namespace ReadingCommunityApi.Web
 
             // Call the service to save the message
             await _conversationService.SendMessage(
-                Convert.ToInt32(conversationId),
                 Convert.ToInt32(senderId),
+                Convert.ToInt32(conversationId),
                 message);
 
             // Broadcast to conversation group

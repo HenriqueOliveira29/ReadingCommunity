@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReadingCommunityAPI.Application.Interfaces.services
+namespace ReadingCommunityApi.Application.Interfaces
 {
     public interface IConversationService
     {
         Task<OperationResult> SendMessage(int senderId, int conversationId, string content);
 
-        Task<Conversation?> GetConversation(int userId, int receiverId);
+        Task<Conversation?> GetConversation(int conversationId);
     }
 }

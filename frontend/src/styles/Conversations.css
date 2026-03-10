@@ -1,0 +1,127 @@
+/* Conversations Styles */
+.conversations-modal {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  max-height: 400px;
+  margin-top: 0.5rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.conversations-header {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  background: #f9f9f9;
+}
+
+.conversations-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+.conversations-list {
+  overflow-y: auto;
+  max-height: 350px;
+}
+
+.conversation-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.conversation-item:hover {
+  background-color: #f9f9f9;
+}
+
+.conversation-info {
+  flex: 1;
+}
+
+.conversation-info h4 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.conversation-info p {
+  margin: 0.25rem 0 0;
+  color: #666;
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 180px;
+}
+
+.conversation-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  margin-left: 1rem;
+}
+
+.time {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.unread-badge {
+  background: #3498db;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.no-conversations {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #999;
+  font-size: 0.95rem;
+}
+
+.loading {
+  padding: 1rem;
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.error-message {
+  padding: 0.75rem;
+  background-color: #fee;
+  color: #c00;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  margin: 1rem;
+}
+
+@media (max-width: 768px) {
+  .conversations-modal {
+    min-width: 250px;
+  }
+
+  .conversation-info p {
+    max-width: 150px;
+  }
+}
