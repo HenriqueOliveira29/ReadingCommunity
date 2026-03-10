@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using ReadingCommunityApi.Core.Models;
 using ReadingCommunityApi.Infrastructure.Data;
+using ReadingCommunityAPI.Application.Interfaces.services;
 using System.Security.Claims;
 
 namespace ReadingCommunityApi.Web
 {
     public class ChatHub : Hub
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IConversationService _conversationService;
 
-        public ChatHub(ApplicationDbContext context)
+        public ChatHub(IConversationService conversationService)
         {
-            _context = context;
+            _conversationService = conversationService;
         }
 
         public async Task JoinConversation(string conversationId)
@@ -26,9 +27,9 @@ namespace ReadingCommunityApi.Web
             var senderId = Context.UserIdentifier;
 
             // Call the service to save the message
-            await _messageService.SaveMessageAsync(
-                conversationId,
-                senderId,
+            await _conversationService.SendMessage(
+                Convert.ToInt32(conversationId),
+                Convert.ToInt32(senderId),
                 message);
 
             // Broadcast to conversation group

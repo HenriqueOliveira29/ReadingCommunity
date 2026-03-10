@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace ReadingCommunityApi.Core.Interfaces
 {
-    public interface IConversationRepository
+    public interface IConversationRepository : IBaseRepository<Conversation>
     {
-        Task<Conversation?> GetConversation(int userId, int receiverId);
-
-        bool SendMessage(int userId, int conversationId);
+        Task<Conversation?> GetConversation(int conversationId);
     }
 }

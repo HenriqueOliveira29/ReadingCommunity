@@ -1,4 +1,7 @@
-﻿using ReadingCommunityApi.Core.Interfaces;
+﻿using ReadingCommunityApi.Application.Dtos;
+using ReadingCommunityApi.Application.Exceptions;
+using ReadingCommunityApi.Application.Interfaces;
+using ReadingCommunityApi.Core.Interfaces;
 using ReadingCommunityApi.Core.Models;
 using ReadingCommunityAPI.Application.Interfaces.services;
 using System;
@@ -12,21 +15,42 @@ namespace ReadingCommunityAPI.Application.Services
     public class ConversationService : IConversationService
     {
         private readonly IConversationRepository _conversationRepository;
-        public ConversationService(IConversationRepository conversation)
-        {
-            _conversationRepository = conversation;
-        }
-        public async Task<Conversation?> GetConversation(int userId, int receiverId)
-        {
-            ArgumentNullException.ThrowIfNull(userId, nameof(userId));
-            ArgumentNullException.ThrowIfNull(receiverId, nameof(receiverId));
+        private readonly IUserRepository _userRepository;
 
-            return await _conversationRepository.GetConversation(userId, receiverId);
+        public ConversationService(IConversationRepository conversationRepository, IUserRepository userRepository)
+        {
+            _conversationRepository = conversationRepository;
+            _userRepository = userRepository;
+        }
+        public async Task<Conversation?> GetConversation(int conversationId)
+        {
+            ArgumentNullException.ThrowIfNull(conversationId, nameof(conversationId));
+
+            return await _conversationRepository.GetConversation(conversationId);
         }
 
-        public Task<bool> SendMessage(int userId, int conversationId)
+        public async Task<OperationResult> SendMessage(int senderId, int conversationId, string content)
         {
-            throw new NotImplementedException();
+            ArgumentNullException.ThrowIfNull(senderId, nameof(senderId));
+            ArgumentNullException.ThrowIfNull(conversationId, nameof(conversationId));
+
+            var sender = await _userRepository.GetById(senderId);
+            if (sender == null)
+            {
+                throw new NotFoundException($"Cannot find a user with this id {senderId}");
+            }
+
+            var conversation = await _conversationRepository.GetConversation(conversationId);
+            if (conversation == null)
+            {
+                throw new NotFoundException($"Cannot find a conversation with the id {conversationId}");
+            }
+
+            conversation.AddMessage(senderId, content);
+
+            await _conversationRepository.UpdateAsync(conversation);
+
+            return OperationResult.Success("Sended with success");
         }
     }
 }

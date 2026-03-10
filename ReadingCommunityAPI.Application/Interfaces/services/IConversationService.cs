@@ -1,4 +1,5 @@
-﻿using ReadingCommunityApi.Core.Models;
+﻿using ReadingCommunityApi.Application.Dtos;
+using ReadingCommunityApi.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace ReadingCommunityAPI.Application.Interfaces.services
 {
     public interface IConversationService
     {
-        Task<bool> SendMessage(int userId, int conversationId);
+        Task<OperationResult> SendMessage(int senderId, int conversationId, string content);
 
         Task<Conversation?> GetConversation(int userId, int receiverId);
     }

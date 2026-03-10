@@ -1,4 +1,5 @@
-﻿using ReadingCommunityApi.Core.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using ReadingCommunityApi.Core.Interfaces;
 using ReadingCommunityApi.Core.Models;
 using ReadingCommunityApi.Infrastructure.Data;
 using System;
@@ -15,6 +16,11 @@ namespace ReadingCommunityApi.Infrastructure.Repositories
         public ConversationRepository(ApplicationDbContext context) : base(context)
         {
          
+        }
+
+        public async Task<Conversation?> GetConversation(int conversationId)
+        {
+            return await _context.Conversations.Include(c => c.Participants).FirstOrDefaultAsync(c => c.Id == conversationId);
         }
     }
 }
