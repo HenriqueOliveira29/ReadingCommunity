@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import apiService from '../services/apiService';
 import { BookListDTO } from '../types';
 import '../styles/Home.css';
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
   const [books, setBooks] = useState<BookListDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -29,7 +31,17 @@ const Home: React.FC = () => {
 
   return (
     <div className="home-container">
-      <h1>Books Collection</h1>
+      <div className="home-header">
+        <h1>Books Collection</h1>
+        <div className="header-buttons">
+          <button className="secondary-button" onClick={() => navigate('/authors')}>
+            View Authors
+          </button>
+          <button className="add-book-button" onClick={() => navigate('/create-book')}>
+            Add New Book
+          </button>
+        </div>
+      </div>
 
       {error && <div className="error-message">{error}</div>}
 

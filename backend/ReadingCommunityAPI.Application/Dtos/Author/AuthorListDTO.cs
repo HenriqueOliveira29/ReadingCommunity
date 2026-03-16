@@ -6,5 +6,6 @@ public class AuthorListDTO
     public string Name { get; set; }
     public string Nationality { get; set; }
     public int NumberOfBooks {get; set;}
+    public string ProfileImageUrl { get; set; }
 
 }

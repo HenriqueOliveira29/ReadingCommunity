@@ -37,7 +37,9 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-brand">
-          <h1>📚 Reading Community</h1>
+          <button className="navbar-brand-button" onClick={() => navigate('/')}>
+            <h1>Reading Community</h1>
+          </button>
         </div>
 
         <div className="navbar-icons">

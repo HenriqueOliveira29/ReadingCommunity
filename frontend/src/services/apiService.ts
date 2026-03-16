@@ -56,48 +56,48 @@ class ApiService {
 
   // Book endpoints
   async getBooks(page?: number, pageSize?: number) {
-    return this.api.get<OperationResult<PageResult<BookListDTO[]>>>('/books', {
+    return this.api.get<OperationResult<PageResult<BookListDTO[]>>>('/book', {
       params: { page, pageSize },
     });
   }
 
   async getBookById(id: number) {
-    return this.api.get<OperationResult<BookDetailDTO>>(`/books/${id}`);
+    return this.api.get<OperationResult<BookDetailDTO>>(`/book/${id}`);
   }
 
   async createBook(data: BookCreateDTO) {
-    return this.api.post<OperationResult<BookDetailDTO>>('/books', data);
+    return this.api.post<OperationResult<BookDetailDTO>>('/book/add', data);
   }
 
   async updateBook(id: number, data: BookCreateDTO) {
-    return this.api.put<OperationResult<BookDetailDTO>>(`/books/${id}`, data);
+    return this.api.put<OperationResult<BookDetailDTO>>(`/book/${id}`, data);
   }
 
   async deleteBook(id: number) {
-    return this.api.delete<OperationResult<void>>(`/books/${id}`);
+    return this.api.delete<OperationResult<void>>(`/book/${id}`);
   }
 
   // Author endpoints
   async getAuthors(page?: number, pageSize?: number) {
-    return this.api.get<OperationResult<PageResult<AuthorListDTO[]>>>('/authors', {
+    return this.api.get<OperationResult<PageResult<AuthorListDTO[]>>>('/author', {
       params: { page, pageSize },
     });
   }
 
   async getAuthorById(id: number) {
-    return this.api.get<OperationResult<AuthorDetailDTO>>(`/authors/${id}`);
+    return this.api.get<OperationResult<AuthorDetailDTO>>(`/author/${id}`);
   }
 
   async createAuthor(data: AuthorCreateDTO) {
-    return this.api.post<OperationResult<AuthorDetailDTO>>('/authors', data);
+    return this.api.post<OperationResult<AuthorDetailDTO>>('/author/add', data);
   }
 
   async updateAuthor(id: number, data: AuthorCreateDTO) {
-    return this.api.put<OperationResult<AuthorDetailDTO>>(`/authors/${id}`, data);
+    return this.api.put<OperationResult<AuthorDetailDTO>>(`/author/${id}`, data);
   }
 
   async deleteAuthor(id: number) {
-    return this.api.delete<OperationResult<void>>(`/authors/${id}`);
+    return this.api.delete<OperationResult<void>>(`/author/${id}`);
   }
 
   // Review endpoints

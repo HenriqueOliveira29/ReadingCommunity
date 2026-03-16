@@ -6,6 +6,7 @@ export interface AuthorListDTO {
   name: string;
   nationality: string;
   numberOfBooks: number;
+  profileImageUrl: string;
 }
 
 export interface AuthorDetailDTO {

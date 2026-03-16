@@ -42,7 +42,8 @@ public class AuthorMapper : IAuthorMapper
             Id = entity.Id,
             Name = entity.Name,
             Nationality = entity.Nationality,
-            NumberOfBooks = entity.Books.Count()
+            NumberOfBooks = entity.Books.Count(),
+            ProfileImageUrl = entity.ProfileImageUrl
         };
     }
 }

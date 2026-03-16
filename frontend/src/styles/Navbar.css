@@ -1,12 +1,13 @@
 /* Navbar Styles */
 .navbar {
-  background-color: #2c3e50;
+  background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #CD853F 100%);
   color: white;
   padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 3px solid #654321;
 }
 
 .navbar-container {
@@ -20,8 +21,27 @@
 
 .navbar-brand h1 {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-family: 'Georgia', serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+}
+
+.navbar-brand-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease;
+}
+
+.navbar-brand-button:hover {
+  transform: scale(1.05);
+}
+
+.navbar-brand-button h1 {
+  color: white;
 }
 
 .navbar-icons {
@@ -35,16 +55,21 @@
 }
 
 .navbar-icon-button {
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
   font-size: 1.5rem;
   cursor: pointer;
   padding: 0.5rem;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .navbar-icon-button:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Profile Menu */
@@ -52,13 +77,14 @@
   position: absolute;
   right: 0;
   top: 100%;
-  background: white;
-  color: #333;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #FFF8DC 0%, #F5DEB3 100%);
+  color: #8B4513;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(139, 69, 19, 0.3);
   min-width: 200px;
   margin-top: 0.5rem;
   z-index: 1000;
+  border: 2px solid #D2691E;
 }
 
 .profile-menu-header {
@@ -83,26 +109,30 @@
   padding: 0.75rem 1rem;
   color: inherit;
   text-decoration: none;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
   border: none;
   background: none;
   cursor: pointer;
   width: 100%;
   text-align: left;
   font-size: 0.95rem;
-}
-
-.menu-item:hover {
-  background-color: #f5f5f5;
-}
-
-.menu-item.logout {
-  color: #e74c3c;
   font-weight: 500;
 }
 
+.menu-item:hover {
+  background: linear-gradient(135deg, #D2691E 0%, #CD853F 100%);
+  color: white;
+  transform: translateX(5px);
+}
+
+.menu-item.logout {
+  color: #DC143C;
+  font-weight: 600;
+}
+
 .menu-item.logout:hover {
-  background-color: #fee;
+  background: linear-gradient(135deg, #DC143C 0%, #B22222 100%);
+  color: white;
 }
 
 /* Conversations Modal */
@@ -110,27 +140,30 @@
   position: absolute;
   right: 0;
   top: 100%;
-  background: white;
-  color: #333;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #FFF8DC 0%, #F5DEB3 100%);
+  color: #8B4513;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(139, 69, 19, 0.3);
   min-width: 300px;
   max-height: 400px;
   margin-top: 0.5rem;
   z-index: 1000;
   display: flex;
   flex-direction: column;
+  border: 2px solid #D2691E;
 }
 
 .conversations-header {
   padding: 1rem;
-  border-bottom: 1px solid #eee;
-  background: #f9f9f9;
+  border-bottom: 2px solid #D2691E;
+  background: linear-gradient(135deg, #F5DEB3 0%, #DEB887 100%);
 }
 
 .conversations-header h2 {
   margin: 0;
   font-size: 1rem;
+  font-weight: 600;
+  color: #8B4513;
 }
 
 .conversations-list {
@@ -140,16 +173,18 @@
 
 .conversation-item {
   padding: 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #D2691E;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .conversation-item:hover {
-  background-color: #f9f9f9;
+  background: linear-gradient(135deg, #D2691E 0%, #CD853F 100%);
+  color: white;
+  transform: translateX(5px);
 }
 
 .conversation-info {
