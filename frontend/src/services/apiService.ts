@@ -102,15 +102,15 @@ class ApiService {
 
   // Review endpoints
   async getReviewsByBook(bookId: number) {
-    return this.api.get<OperationResult<ReviewDetailDTO[]>>(`/reviews/book/${bookId}`);
+    return this.api.get<OperationResult<ReviewDetailDTO[]>>(`/review/book/${bookId}`);
   }
 
   async createReview(data: ReviewCreateDTO) {
-    return this.api.post<OperationResult<ReviewDetailDTO>>('/reviews', data);
+    return this.api.post<OperationResult<ReviewDetailDTO>>('/review', data);
   }
 
   async updateReview(id: number, data: ReviewCreateDTO) {
-    return this.api.put<OperationResult<ReviewDetailDTO>>(`/reviews/${id}`, data);
+    return this.api.put<OperationResult<ReviewDetailDTO>>(`/review/${id}`, data);
   }
 
   async deleteReview(id: number) {
@@ -134,6 +134,22 @@ class ApiService {
     return this.api.get<OperationResult<PageResult<UserListDTO[]>>>('/users', {
       params: { page, pageSize },
     });
+  }
+
+  async followUser(id: number) {
+    return this.api.get<OperationResult<void>>(`/user/followUser/${id}`);
+  }
+
+  async unFollowUser(id: number) {
+    return this.api.get<OperationResult<void>>(`/user/unFollowUser/${id}`);
+  }
+
+  async isFollowing(id: number) {
+    return this.api.get<OperationResult<boolean>>(`/user/isFollowing/${id}`);
+  }
+
+  async getFollowedUsers() {
+    return this.api.get<OperationResult<UserListDTO[]>>(`/user/followed`);
   }
 
   // Wishlist endpoints
@@ -172,15 +188,19 @@ class ApiService {
 
   // Conversation endpoints
   async getConversations() {
-    return this.api.get<any>('/conversations');
+    return this.api.get<any>('/conversation');
+  }
+
+  async createConversation(otherUserId: number) {
+    return this.api.post<OperationResult<any>>(`/conversation/create/${otherUserId}`);
   }
 
   async getConversationMessages(conversationId: string) {
-    return this.api.get<any>(`/conversations/${conversationId}/messages`);
+    return this.api.get<any>(`/conversation/${conversationId}/messages`);
   }
 
   async sendMessage(conversationId: string, message: string) {
-    return this.api.post<OperationResult<void>>(`/conversations/${conversationId}/messages`, { message });
+    return this.api.post<OperationResult<void>>(`/conversation/${conversationId}/messages`, { message });
   }
 }
 

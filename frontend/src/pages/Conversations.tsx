@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import apiService from '../services/apiService';
+import { UserListDTO } from '../types';
 import '../styles/Conversations.css';
 
 interface Conversation {
@@ -14,6 +15,9 @@ const Conversations: React.FC = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [followedUsers, setFollowedUsers] = useState<UserListDTO[]>([]);
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
   useEffect(() => {
     fetchConversations();
@@ -32,10 +36,48 @@ const Conversations: React.FC = () => {
     }
   };
 
+  const fetchFollowedUsers = async () => {
+    try {
+      setIsLoadingUsers(true);
+      const response = await apiService.getFollowedUsers();
+      if (response.data.isSuccess) {
+        setFollowedUsers(response.data.data);
+      }
+    } catch (err: any) {
+      console.error('Failed to load followed users', err);
+    } finally {
+      setIsLoadingUsers(false);
+    }
+  };
+
+  const handleCreateMessage = async (userId: number) => {
+    try {
+      const response = await apiService.createConversation(userId);
+      if (response.data.isSuccess) {
+        setShowCreateModal(false);
+        // Refresh conversations
+        await fetchConversations();
+      } else {
+        setError(response.data.message || 'Failed to create conversation');
+      }
+    } catch (err: any) {
+      setError('Failed to create conversation');
+      console.error(err);
+    }
+  };
+
+  const openCreateModal = () => {
+    setShowCreateModal(true);
+    fetchFollowedUsers();
+  };
+
   return (
     <div className="conversations-modal">
       <div className="conversations-header">
         <h2>Messages</h2>
+        <button className="create-message-button" onClick={openCreateModal}>
+          Create Message
+        </button>
       </div>
 
       {error && <div className="error-message">{error}</div>}
@@ -60,6 +102,35 @@ const Conversations: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {showCreateModal && (
+        <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Select a user to message</h3>
+            {isLoadingUsers ? (
+              <div className="loading">Loading users...</div>
+            ) : followedUsers.length === 0 ? (
+              <p>You are not following anyone yet.</p>
+            ) : (
+              <div className="users-list">
+                {followedUsers.map((user) => (
+                  <div key={user.id} className="user-item" onClick={() => handleCreateMessage(user.id)}>
+                    <img 
+                      src={user.profileImageUrl || "https://via.placeholder.com/40x40?text=U"} 
+                      alt={`${user.userName}'s profile`} 
+                      className="user-avatar" 
+                    />
+                    <span>{user.userName}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <button className="close-modal-button" onClick={() => setShowCreateModal(false)}>
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>

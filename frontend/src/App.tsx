@@ -7,9 +7,11 @@ import SignUp from './pages/SignUp';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import CreateBook from './pages/CreateBook';
+import BookDetail from './pages/BookDetail';
 import Authors from './pages/Authors';
 import CreateAuthor from './pages/CreateAuthor';
 import AuthorDetail from './pages/AuthorDetail';
+import Conversations from './pages/Conversations';
 import './styles/App.css';
 
 interface ProtectedRouteProps {
@@ -51,6 +53,14 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateBook />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/books/:id"
+          element={
+            <ProtectedRoute>
+              <BookDetail />
             </ProtectedRoute>
           }
         />

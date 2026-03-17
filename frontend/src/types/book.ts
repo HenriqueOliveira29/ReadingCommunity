@@ -7,6 +7,7 @@ export interface BookListDTO {
   description: string;
   publicationDate: string;
   authorName: string;
+  coverImageUrl: string;
   categories: string[];
 }
 

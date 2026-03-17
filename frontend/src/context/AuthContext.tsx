@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import chatService from '../services/chatService';
 
 interface User {
   id: string;
@@ -21,6 +22,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const savedUser = localStorage.getItem('user');
     return savedUser ? JSON.parse(savedUser) : null;
   });
+
+  useEffect(() => {
+    if (user?.token) {
+      chatService.startConnection(user.token).catch(console.error);
+    } else {
+      chatService.stopConnection().catch(console.error);
+    }
+
+    return () => {
+      chatService.stopConnection().catch(console.error);
+    };
+  }, [user]);
 
   const login = (userData: User) => {
     setUser(userData);

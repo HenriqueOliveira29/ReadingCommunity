@@ -52,9 +52,9 @@ const Home: React.FC = () => {
       ) : (
         <div className="books-grid">
           {books.map((book) => (
-            <div key={book.id} className="book-card">
+            <div key={book.id} className="book-card" onClick={() => navigate(`/books/${book.id}`)}>
               <div className="book-image">
-                <img src="https://via.placeholder.com/200x300?text=Book" alt={book.title} />
+                <img src={book.coverImageUrl || "https://via.placeholder.com/200x300?text=Book"} alt={book.title} />
               </div>
               <div className="book-content">
                 <h3>{book.title}</h3>

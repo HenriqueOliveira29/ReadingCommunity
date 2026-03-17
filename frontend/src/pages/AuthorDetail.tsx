@@ -97,9 +97,9 @@ const AuthorDetail: React.FC = () => {
           {author.books.length > 0 ? (
             <div className="books-grid">
               {author.books.map((book) => (
-                <div key={book.id} className="book-card-small">
+                <div key={book.id} className="book-card-small" onClick={() => navigate(`/books/${book.id}`)}>
                   <div className="book-image-small">
-                    <img src="https://via.placeholder.com/150x200?text=Book" alt={book.title} />
+                    <img src={book.coverImageUrl || "https://via.placeholder.com/150x200?text=Book"} alt={book.title} />
                   </div>
                   <div className="book-info-small">
                     <h4>{book.title}</h4>
