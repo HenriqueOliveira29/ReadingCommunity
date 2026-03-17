@@ -51,5 +51,37 @@ namespace ReadingCommunityApi.Application.Services
 
             return OperationResult.Success("Message sent successfully");
         }
+
+        public async Task<OperationResult<List<Conversation>>> GetUserConversations(int userId)
+        {
+            var conversations = await _conversationRepository.GetUserConversations(userId);
+            return OperationResult<List<Conversation>>.Success(conversations, "Conversations retrieved successfully");
+        }
+
+        public async Task<OperationResult<Conversation>> CreateConversation(int userId, int otherUserId)
+        {
+            if (userId == otherUserId)
+            {
+                throw new ValidationException("Cannot create conversation with yourself");
+            }
+
+            var user = await _userRepository.GetById(userId);
+            var otherUser = await _userRepository.GetById(otherUserId);
+            if (user == null || otherUser == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            // Check if conversation already exists
+            var existingConversation = await _conversationRepository.GetConversationBetweenUsers(userId, otherUserId);
+            if (existingConversation != null)
+            {
+                return OperationResult<Conversation>.Success(existingConversation, "Conversation already exists");
+            }
+
+            var conversation = new Conversation(userId, otherUserId);
+            var result = await _conversationRepository.AddAsync(conversation);
+            return OperationResult<Conversation>.Success(result, "Conversation created successfully");
+        }
     }
 }

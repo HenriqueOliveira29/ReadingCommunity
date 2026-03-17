@@ -8,6 +8,13 @@ namespace ReadingCommunityApi.Application.mappers;
 
 public class BookMapper : IBookMapper
 {
+    private readonly IReviewMapper _reviewMapper;
+
+    public BookMapper(IReviewMapper reviewMapper)
+    {
+        _reviewMapper = reviewMapper;
+    }
+
     public BookDetailDTO MapToDetailDto(Book entity)
     {
         if(entity.Author == null)
@@ -27,7 +34,8 @@ public class BookMapper : IBookMapper
             NumberOfPages = entity.NumberOfPages,
             Dimensions = entity.Dimensions,
             Images = entity.Images.Select(t => t.ImageUrl).ToList(),
-            Categories = entity.Categories.Select(t => t.Name).ToList()
+            Categories = entity.Categories.Select(t => t.Name).ToList(),
+            Reviews = entity.Reviews.Select(r => _reviewMapper.MapToDetailDto(r)).ToList()
         };
     }
 
@@ -52,6 +60,7 @@ public class BookMapper : IBookMapper
             Description = entity.Description,
             PublicationDate = entity.PublicationDate,
             AuthorName = entity.Author.Name,
+            CoverImageUrl = entity.CoverImageUrl,
             Categories = entity.Categories.Select(t => t.Name).ToList()
         };
     }

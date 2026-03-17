@@ -82,4 +82,17 @@ public class UserService : IUserService
             message: "You unfollow this user"
         );
     }
+
+    public async Task<OperationResult<bool>> IsFollowing(int userId, int targetUserId)
+    {
+        var userFollow = await _userFollowRepository.GetByIds(targetUserId, userId);
+        return OperationResult<bool>.Success(userFollow != null);
+    }
+
+    public async Task<OperationResult<List<UserListDTO>>> GetFollowedUsers(int userId)
+    {
+        var followedUsers = await _userFollowRepository.GetFollowedUsers(userId);
+        var userListDTOs = followedUsers.Select(u => _userMapper.MapToListDTO(u)).ToList();
+        return OperationResult<List<UserListDTO>>.Success(userListDTOs);
+    }
 }

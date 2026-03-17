@@ -18,7 +18,17 @@ public class BookRepository : BaseRepository<Book>, IBookRepository
 
     public async Task<Book?> GetByIdAsync(int id)
     {
-        return await _context.Books.Include(t => t.Author).Where(t => t.Id == id).FirstOrDefaultAsync();
+        var book = await _context.Books
+            .AsNoTracking()
+            .Include(t => t.Reviews)
+                .ThenInclude(r => r.User)
+            .Include(t => t.Categories)
+            .Include(t => t.Images)
+            .Include(t => t.Author)
+            .Where(t => t.Id == id)
+            .FirstOrDefaultAsync();
+
+        return book;
     }
 
     public Task<int> GetTotalCountAsync()

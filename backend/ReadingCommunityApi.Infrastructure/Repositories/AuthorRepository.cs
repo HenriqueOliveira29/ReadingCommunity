@@ -28,6 +28,11 @@ public class AuthorRepository : BaseRepository<Author>, IAuthorRepository
 
     public async Task<Author?> GetByIdAsync(int id)
     {
-        return await _context.Authors.Include(x => x.Books).Where(x => x.Id == id).FirstOrDefaultAsync();
+        var author = await _context.Authors
+            .AsNoTracking()
+            .Include(a => a.Books)
+            .Where(a => a.Id == id).FirstOrDefaultAsync();
+
+        return author;
     }
 }

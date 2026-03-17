@@ -12,7 +12,6 @@ namespace ReadingCommunityApi.Infrastructure.Repositories
 {
     public class ConversationRepository : BaseRepository<Conversation>, IConversationRepository
     {
-        private readonly ApplicationDbContext _context;
         public ConversationRepository(ApplicationDbContext context) : base(context)
         {
          
@@ -21,6 +20,23 @@ namespace ReadingCommunityApi.Infrastructure.Repositories
         public async Task<Conversation?> GetConversation(int conversationId)
         {
             return await _context.Conversations.Include(c => c.Participants).FirstOrDefaultAsync(c => c.Id == conversationId);
+        }
+
+        public async Task<List<Conversation>> GetUserConversations(int userId)
+        {
+            return await _context.Conversations
+                .Include(c => c.Participants)
+                .Include(c => c.Messages.OrderByDescending(m => m.SentAt).Take(1))
+                .Where(c => c.Participants.Any(p => p.UserId == userId))
+                .ToListAsync();
+        }
+
+        public async Task<Conversation?> GetConversationBetweenUsers(int userId1, int userId2)
+        {
+            return await _context.Conversations
+                .Include(c => c.Participants)
+                .Where(c => c.Participants.Any(p => p.UserId == userId1) && c.Participants.Any(p => p.UserId == userId2))
+                .FirstOrDefaultAsync();
         }
     }
 }

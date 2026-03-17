@@ -46,4 +46,20 @@ public class UserController : ControllerBase
         var result = await _userService.UnFollowUser(id, userId);
         return StatusCode(result.StatusCode, result);   
     }
+
+    [HttpGet("isFollowing/{id}")]
+    public async Task<ActionResult> IsFollowing(int id)
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var result = await _userService.IsFollowing(userId, id);
+        return StatusCode(result.StatusCode, result);   
+    }
+
+    [HttpGet("followed")]
+    public async Task<ActionResult> GetFollowedUsers()
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var result = await _userService.GetFollowedUsers(userId);
+        return StatusCode(result.StatusCode, result);
+    }
 }

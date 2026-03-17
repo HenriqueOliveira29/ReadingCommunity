@@ -17,4 +17,13 @@ public class UserFollowRepository : BaseRepository<UserFollow>, IUserFollowRepos
     {
         return await _context.UserFollows.Where(u=> u.FollowingId == followingId).Where(uf => uf.FollowerId == followerId).FirstOrDefaultAsync();
     }
+
+    public async Task<List<User>> GetFollowedUsers(int userId)
+    {
+        return await _context.UserFollows
+            .Where(uf => uf.FollowerId == userId)
+            .Include(uf => uf.Following)
+            .Select(uf => uf.Following)
+            .ToListAsync();
+    }
 }

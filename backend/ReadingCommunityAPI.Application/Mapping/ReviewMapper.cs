@@ -27,10 +27,12 @@ public class ReviewMapper : IReviewMapper
             Id = entity.Id,
             Rating = entity.Rating,
             Comment = entity.Comment,
+            DatePosted = entity.DatePosted,
             BookId = entity.BookId,
             BookName = entity.Book.Title,
             UserId = entity.UserId,
             UserName = entity.User.UserName,
+            UserProfileImageUrl = entity.User.ProfileImageUrl,
         };
     }
 

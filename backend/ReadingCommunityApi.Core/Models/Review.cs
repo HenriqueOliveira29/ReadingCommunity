@@ -24,7 +24,7 @@ public class Review
         this.Comment = comment;
         this.BookId = bookId;
         this.UserId = userid;
-        this.DatePosted = DateTime.Now;
+        this.DatePosted = DateTime.UtcNow;
     }
 
     public void SetUser(int userId)

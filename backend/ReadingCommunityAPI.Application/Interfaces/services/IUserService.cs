@@ -12,4 +12,8 @@ public interface IUserService
     Task<OperationResult> FollowUser(int id, int userId);
 
     Task<OperationResult> UnFollowUser(int id, int userId);
+
+    Task<OperationResult<bool>> IsFollowing(int userId, int targetUserId);
+
+    Task<OperationResult<List<UserListDTO>>> GetFollowedUsers(int userId);
 }

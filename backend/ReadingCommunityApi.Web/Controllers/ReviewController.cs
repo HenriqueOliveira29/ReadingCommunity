@@ -26,8 +26,8 @@ public class ReviewController : ControllerBase
         return StatusCode(result.StatusCode, result);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<OperationResult>> Create(int id)
+    [HttpGet("/book/{id}")]
+    public async Task<ActionResult<OperationResult>> GetReviewByBook(int id)
     {
         var result = await _reviewService.GetReviewsByBook(id);
         return StatusCode(result.StatusCode, result);

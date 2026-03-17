@@ -13,5 +13,9 @@ namespace ReadingCommunityApi.Application.Interfaces
         Task<OperationResult> SendMessage(int senderId, int conversationId, string content);
 
         Task<Conversation?> GetConversation(int conversationId);
+
+        Task<OperationResult<List<Conversation>>> GetUserConversations(int userId);
+
+        Task<OperationResult<Conversation>> CreateConversation(int userId, int otherUserId);
     }
 }

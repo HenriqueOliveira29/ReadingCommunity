@@ -8,6 +8,8 @@ public class ReviewDetailDTO
 
     public string Comment { get; set; }
 
+    public DateTime DatePosted { get; set; }
+
     public int BookId { get; set; }
 
     public string BookName { get; set; }
@@ -15,4 +17,6 @@ public class ReviewDetailDTO
     public int UserId { get; set; }
 
     public string UserName { get; set; }
+
+    public string UserProfileImageUrl { get; set; }
 }
