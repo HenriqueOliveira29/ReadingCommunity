@@ -27,10 +27,37 @@ const Conversations: React.FC = () => {
     try {
       setIsLoading(true);
       const response = await apiService.getConversations();
-      setConversations(response.data);
+      const data = response.data?.data;
+
+      if (!Array.isArray(data)) {
+        setError('Received invalid conversation payload from server');
+        setConversations([]);
+        return;
+      }
+
+      const normalized = data.map((item: any): Conversation => ({
+        id: String(item.id ?? ''),
+        participantName:
+          item.name ??
+          item.description ??
+          item.participants?.find((p: any) => p.userName)?.userName ??
+          `Conversation #${item.id}`,
+        lastMessage:
+          item.messages?.length > 0
+            ? item.messages[item.messages.length - 1].content ?? 'No messages'
+            : 'No messages yet',
+        lastMessageTime:
+          item.lastMessageAt || item.createdAt
+            ? new Date(item.lastMessageAt ?? item.createdAt).toLocaleString()
+            : '',
+        unreadCount: item.unreadCount ?? 0,
+      }));
+
+      setConversations(normalized);
     } catch (err: any) {
       setError('Failed to load conversations');
       console.error(err);
+      setConversations([]);
     } finally {
       setIsLoading(false);
     }

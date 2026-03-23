@@ -20,6 +20,9 @@ public class Conversation
     {
         Type = ConversationType.Direct;
         CreatedAt = DateTime.UtcNow;
+        Name = "Chat with " + user2Id;
+        Description = "";
+        ImageUrl = "";
         
         Participants.Add(new ConversationParticipant(Id, user1Id));
         Participants.Add(new ConversationParticipant(Id, user2Id));

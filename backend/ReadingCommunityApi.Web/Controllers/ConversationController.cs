@@ -15,10 +15,21 @@ public class ConversationController : ControllerBase
         _conversationService = conversationService;
     }
 
+    private bool TryGetUserId(out int userId)
+    {
+        userId = 0;
+        var value = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrWhiteSpace(value) || !int.TryParse(value, out userId))
+            return false;
+        return true;
+    }
+
     [HttpGet]
     public async Task<ActionResult> GetUserConversations()
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        if (!TryGetUserId(out var userId))
+            return Unauthorized(new { message = "Invalid user claim" });
+
         var result = await _conversationService.GetUserConversations(userId);
         return StatusCode(result.StatusCode, result);
     }
@@ -26,7 +37,8 @@ public class ConversationController : ControllerBase
     [HttpPost("create/{otherUserId}")]
     public async Task<ActionResult> CreateConversation(int otherUserId)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        if (!TryGetUserId(out var userId))
+            return Unauthorized(new { message = "Invalid user claim" });
         var result = await _conversationService.CreateConversation(userId, otherUserId);
         return StatusCode(result.StatusCode, result);
     }
@@ -34,7 +46,9 @@ public class ConversationController : ControllerBase
     [HttpPost("{conversationId}/messages")]
     public async Task<ActionResult> SendMessage(int conversationId, [FromBody] SendMessageRequest request)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        if (!TryGetUserId(out var userId))
+            return Unauthorized(new { message = "Invalid user claim" });
+
         var result = await _conversationService.SendMessage(userId, conversationId, request.Message);
         return StatusCode(result.StatusCode, result);
     }

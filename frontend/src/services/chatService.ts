@@ -6,7 +6,8 @@ class ChatService {
 
   async startConnection(token: string): Promise<void> {
     this.connection = new HubConnectionBuilder()
-      .withUrl('http://localhost:5000/chathub', {
+      // Backend maps the hub at /chatHub (uppercase "H")
+      .withUrl('https://localhost:5001/chatHub', {
         accessTokenFactory: () => token
       })
       .withAutomaticReconnect()

@@ -20,8 +20,8 @@ public class Message
     public Review? Review { get; private set; }
     
     // For file attachments
-    public string AttachmentUrl { get; private set; }
-    public string AttachmentType { get; private set; } // image, pdf, etc.
+    public string? AttachmentUrl { get; private set; }
+    public string? AttachmentType { get; private set; } // image, pdf, etc.
     
     public DateTime SentAt { get; private set; }
     public DateTime? EditedAt { get; private set; }

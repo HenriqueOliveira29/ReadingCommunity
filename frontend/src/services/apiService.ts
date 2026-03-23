@@ -22,14 +22,14 @@ import {
   PageResult,
 } from '../types';
 
-const API_BASE_URL = 'https://localhost:5001/api';
+const API_BASE_URL = '/api';
 
 class ApiService {
   private api: AxiosInstance;
 
   constructor() {
     this.api = axios.create({
-      baseURL: API_BASE_URL,
+      baseURL: "https://localhost:5001" + API_BASE_URL,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -188,7 +188,7 @@ class ApiService {
 
   // Conversation endpoints
   async getConversations() {
-    return this.api.get<any>('/conversation');
+    return this.api.get<OperationResult<any[]>>('/conversation');
   }
 
   async createConversation(otherUserId: number) {
