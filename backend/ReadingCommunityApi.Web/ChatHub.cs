@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using ReadingCommunityApi.Application.Interfaces;
 using ReadingCommunityApi.Core.Models;
 using ReadingCommunityApi.Infrastructure.Data;
@@ -22,22 +23,21 @@ namespace ReadingCommunityApi.Web
                 conversationId);
         }
 
+        [Authorize]
         public async Task SendMessage(string conversationId, string message)
         {
             var senderId = Context.UserIdentifier;
+            
+            if (string.IsNullOrEmpty(senderId)) return;
 
-            // Call the service to save the message
-            await _conversationService.SendMessage(
-                Convert.ToInt32(senderId),
-                Convert.ToInt32(conversationId),
-                message);
+            // 2. Use TryParse or ensure your Identity setup uses numeric IDs
+            if (int.TryParse(senderId, out int sId) && int.TryParse(conversationId, out int cId))
+            {
+                await _conversationService.SendMessage(sId, cId, message);
 
-            // Broadcast to conversation group
-            await Clients.Group(conversationId)
-                .SendAsync("ReceiveMessage",
-                    conversationId,
-                    senderId,
-                    message);
+                await Clients.Group(conversationId).SendAsync("ReceiveMessage", 
+                    conversationId, senderId, message);
+            }
         }
     }
 }

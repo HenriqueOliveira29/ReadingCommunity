@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import apiService from '../services/apiService';
 import { UserListDTO } from '../types';
 import '../styles/Conversations.css';
+import ChatModal from './ChatModal';
+import { useAuth } from '../context/AuthContext';
 
 interface Conversation {
   id: string;
@@ -18,6 +20,9 @@ const Conversations: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [followedUsers, setFollowedUsers] = useState<UserListDTO[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+  const { user } = useAuth();
+  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   useEffect(() => {
     fetchConversations();
@@ -68,7 +73,7 @@ const Conversations: React.FC = () => {
       setIsLoadingUsers(true);
       const response = await apiService.getFollowedUsers();
       if (response.data.isSuccess) {
-        setFollowedUsers(response.data.data);
+        setFollowedUsers(response.data.data || []);
       }
     } catch (err: any) {
       console.error('Failed to load followed users', err);
@@ -81,7 +86,7 @@ const Conversations: React.FC = () => {
     try {
       const response = await apiService.createConversation(userId);
       if (response.data.isSuccess) {
-        setShowCreateModal(false);
+        setShowCreateModal(true);
         // Refresh conversations
         await fetchConversations();
       } else {
@@ -99,6 +104,14 @@ const Conversations: React.FC = () => {
   };
 
   return (
+    <>
+    <ChatModal 
+    isOpen={isChatModalOpen} 
+    onClose={() => setIsChatModalOpen(false)} 
+    token={user?.token || ""} 
+    conversationId={selectedConversationId || ""} 
+    currentUserId={user?.id?.toString() || ""} 
+        />
     <div className="conversations-modal">
       <div className="conversations-header">
         <h2>Messages</h2>
@@ -116,7 +129,11 @@ const Conversations: React.FC = () => {
       ) : (
         <div className="conversations-list">
           {conversations.map((conversation) => (
-            <div key={conversation.id} className="conversation-item">
+            <div key={conversation.id} className="conversation-item" onClick={()=> {
+              console.log("Selected conversation ID:", conversation.id);
+              setSelectedConversationId(conversation.id);
+              setIsChatModalOpen(true);
+            }}>
               <div className="conversation-info">
                 <h4>{conversation.participantName}</h4>
                 <p>{conversation.lastMessage}</p>
@@ -161,6 +178,7 @@ const Conversations: React.FC = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
